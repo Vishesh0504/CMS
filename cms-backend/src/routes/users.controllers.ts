@@ -10,11 +10,14 @@ const privateKey = fs.readFileSync(
     path.join(__dirname, "../../certificates/server.key"),
   );
 
-
+interface User{
+    name:string;
+    email:string;
+}
 //generate JWT token on successful sign in
-async function generateJWT(userEmail:string) {
+async function generateJWT(user:User) {
     try {
-      let token = await jwt.sign(userEmail, privateKey, { algorithm: "RS256" });
+      let token = await jwt.sign(user, privateKey, { algorithm: "RS256" });
       return token;
     } catch (err) {
       console.log(err);
@@ -40,6 +43,7 @@ const handleSignUp= async(req:Request,res:Response)=>{
             }
             else{
                 const newUser = await User.create({
+                    name:user.name,
                     email:user.email,
                     password:user.password,
                     securityQues:user.securityQues,
@@ -70,9 +74,14 @@ const handleLogIn= async(req:Request,res:Response)=>{
             const enteredPass = user.password
             if(await bcrypt.compare(enteredPass,existingPass))
             {
-                let jwtToken = await generateJWT(user.email);
+                const foundUser ={
+                    name:user.name,
+                    email:user.email
+                }
+                let jwtToken = await generateJWT(foundUser);
                 res
                 .cookie('access_token',jwtToken,{secure:true,httpOnly:true,sameSite:true})
+                .cookie('user',foundUser,{secure:true,sameSite:true})
                 .status(200)
                 .json({message:"user successfully logged in"})
             }else{
