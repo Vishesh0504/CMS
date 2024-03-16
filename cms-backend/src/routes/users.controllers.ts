@@ -27,11 +27,13 @@ const handleSignUp= async(req:Request,res:Response)=>{
         let user;
         if(req.body)
         {
-            user = req.body.user;
+            user = req.body;
+            // console.log(user);
         }
         if(user)
         {
             await connectDB();
+            console.log("hello");
             if(await User.exists({ email: user.email }))
             {
                 return res.status(409).json({error:"User already exists,Please Login instead"});
@@ -41,7 +43,7 @@ const handleSignUp= async(req:Request,res:Response)=>{
                     email:user.email,
                     password:user.password,
                     securityQues:user.securityQues,
-                    securityAnd:user.securityAns,
+                    securityAns:user.securityAns,
                     createdAt:new Date(),
                 })
                 res.status(200).json({message:"User successfully created,Login to continue"})
@@ -59,13 +61,14 @@ const handleSignUp= async(req:Request,res:Response)=>{
 
 const handleLogIn= async(req:Request,res:Response)=>{
     try{
-        const user = req.body.user;
+        const user = req.body;
+        await connectDB();
         if(await User.exists({email:user.email}))
         {
             const existingUser= await User.findOne({email:user.email})
             const existingPass = existingUser?.password;
-            const enteredPass = await bcrypt.hash(user.password,10);
-            if(await bcrypt.compare(existingPass,enteredPass))
+            const enteredPass = user.password
+            if(await bcrypt.compare(enteredPass,existingPass))
             {
                 let jwtToken = await generateJWT(user.email);
                 res
