@@ -24,7 +24,7 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <CookiesProvider>
-          <RouterProvider router={router} />
+        <RouterProvider router={router} />
       </CookiesProvider>
     </StrictMode>,
   );

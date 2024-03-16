@@ -13,6 +13,9 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SignupImport } from './routes/signup'
+import { Route as ForgotPasswordIndexImport } from './routes/forgotPassword.index'
+import { Route as ForgotPasswordEnterAnsImport } from './routes/forgotPassword.enterAns'
 
 // Create Virtual Routes
 
@@ -20,10 +23,25 @@ const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
 
+const SignupRoute = SignupImport.update({
+  path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const ForgotPasswordIndexRoute = ForgotPasswordIndexImport.update({
+  path: '/forgotPassword/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ForgotPasswordEnterAnsRoute = ForgotPasswordEnterAnsImport.update({
+  path: '/forgotPassword/enterAns',
+  getParentRoute: () => rootRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -33,11 +51,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/signup': {
+      preLoaderRoute: typeof SignupImport
+      parentRoute: typeof rootRoute
+    }
+    '/forgotPassword/enterAns': {
+      preLoaderRoute: typeof ForgotPasswordEnterAnsImport
+      parentRoute: typeof rootRoute
+    }
+    '/forgotPassword/': {
+      preLoaderRoute: typeof ForgotPasswordIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([IndexLazyRoute])
+export const routeTree = rootRoute.addChildren([
+  IndexLazyRoute,
+  SignupRoute,
+  ForgotPasswordEnterAnsRoute,
+  ForgotPasswordIndexRoute,
+])
 
 /* prettier-ignore-end */

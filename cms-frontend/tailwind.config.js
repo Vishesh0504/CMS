@@ -17,6 +17,8 @@ module.exports = {
       },
     },
     extend: {
+      backgroundImage: {
+        'hero-pattern': "url('/bg1.png')",},
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

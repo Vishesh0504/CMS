@@ -1,7 +1,7 @@
 // vite.config.ts
-import { defineConfig } from 'vite'
-import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
-import path from "path"
+import { defineConfig } from "vite";
+import { TanStackRouterVite } from "@tanstack/router-vite-plugin";
+import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -13,4 +13,4 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-})
+});

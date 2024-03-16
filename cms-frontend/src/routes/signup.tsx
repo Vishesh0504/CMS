@@ -1,7 +1,9 @@
-import { createLazyFileRoute,useNavigate} from "@tanstack/react-router";
-export const Route = createLazyFileRoute("/")({
-  component: Index,
-});
+import { createFileRoute,useNavigate} from '@tanstack/react-router'
+
+export const Route = createFileRoute('/signup')({
+  component: () => <SignUp/>
+})
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,7 +20,7 @@ import { z } from "zod";
 import { URL_ORIGIN } from "@/constants";
 import axios from "axios";
 import toast from "react-hot-toast";
-function Index() {
+function SignUp() {
   const passwordSchema = z
     .string()
     .min(10, { message: "Password must be at least 10 characters long" })
@@ -34,6 +36,8 @@ function Index() {
   const formSchema = z.object({
     email: z.string().email(),
     password: passwordSchema,
+    securityQues:z.string(),
+    securityAns:z.string()
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -41,29 +45,31 @@ function Index() {
     defaultValues: {
       email: "",
       password: "",
+      securityQues:"",
+      securityAns:""
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     try{
-      const res = await axios.post(`${URL_ORIGIN}/auth/login`, values);
+    const res = await axios.post(`${URL_ORIGIN}/auth/login`, values);
     if(res.status === 200)
     {
       toast.success(`${res.data.message}`);
     }else{
       toast.error(`${res.data.error}`);
     }
-    }catch(err){
-      console.log(err);
-      toast.error(`${err}`)
-    }
-
+  }catch(err)
+  {
+    toast.error(`${err}`);
+    console.log(err);
   }
+}
   const navigate = useNavigate();
   return (
-    <div className="flex justify-center py-48 bg-hero-pattern bg-cover h-screen">
-        <div className="border border-neutral-300 px-8 py-6 flex flex-col gap-10 rounded-md shadow-md w-96 h-fit">
+    <div className="flex justify-center py-36 bg-hero-pattern bg-cover h-screen ">
+        <div className="border border-neutral-300 px-8 py-6 flex flex-col gap-10 rounded-md shadow-md w-96  ">
       <Form {...form} >
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <FormField
@@ -92,25 +98,41 @@ function Index() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full bg-[#F2950A] text-white">Login</Button>
+          <FormField
+            control={form.control}
+            name="securityQues"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Security Question</FormLabel>
+                <FormControl>
+                  <Input placeholder="Security Question"  {...field} required/>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="securityAns"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Security Answer</FormLabel>
+                <FormControl>
+                  <Input placeholder="Security Answer"  {...field} required/>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className="w-full bg-[#F2950A] text-white">SignUp</Button>
         </form>
+        <div className='flex justify-end gap-2'>
+              <p>Already a user</p>
+              <button className='underline' onClick={()=>navigate({to:"/"})}>
+                  Login?
+              </button>
+        </div>
       </Form>
-      <div className="flex justify-between">
-            <button className=" underline" onClick={()=>{
-              navigate({to:"/forgotPassword"})
-            }}>
-                Forgot Password
-            </button>
-            <div className="flex gap-2">
-                <p>Can't Login</p>
-                <button className="underline" onClick={()=>{
-                  navigate({to:"/signup"})
-                }} >
-                    Sign Up
-                </button>
-            </div>
-      </div>
       </div>
     </div>
-  );
-}
+  );}
