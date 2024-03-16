@@ -95,6 +95,57 @@ const handleLogIn= async(req:Request,res:Response)=>{
     }
 }
 
+const handleForgotPassword= async (req:Request,res:Response)=>{
+    try{
+        await connectDB();
+    const email = req.body.email;
+    if(await User.exists({email:email}))
+    {
+        const user = await User.findOne({email:email})
+        res.send(200).json({
+            securityQues:user?.securityQues,
+        })
+    }else{
+        res.status(400).json({error:"user doesnt exist try Sign Up"})
+    }
+    }catch(err)
+    {
+        res.send(500).json({error:err})
+    }
+
+}
+
+const handleEnterSecurityAns=async(req:Request,res:Response)=>{
+    try{
+        await connectDB();
+        const ans = req.body;
+        const user = await User.findOne({email:ans.email});
+        if(ans.securityAns === user?.securityAns)
+        {
+            res.status(200).json({message:"Correct answer provided,User may reset the password"})
+        }
+    }catch(err)
+    {
+        res.status(500).json({error:err})
+    }
+}
+
+const handleResetPassword=async(req:Request,res:Response)=>{
+    try{
+        await connectDB();
+        const request = req.body
+        const user = await User.findOne({email:request.email})
+        if(user)
+        {
+            user.password = request.password;
+            await user.save();
+            res.status(200).json({message:"Password successfully updated,try logging in"})
+        }
+    }catch(err)
+    {
+        res.status(500).json({error:err})
+    }
+}
 export{
-    handleSignUp,handleLogIn
+    handleSignUp,handleLogIn,handleForgotPassword,
 }
