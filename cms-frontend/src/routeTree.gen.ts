@@ -14,7 +14,9 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SignupImport } from './routes/signup'
+import { Route as DashboardImport } from './routes/dashboard'
 import { Route as ForgotPasswordIndexImport } from './routes/forgotPassword.index'
+import { Route as ForgotPasswordResetPassImport } from './routes/forgotPassword.resetPass'
 import { Route as ForgotPasswordEnterAnsImport } from './routes/forgotPassword.enterAns'
 
 // Create Virtual Routes
@@ -28,6 +30,11 @@ const SignupRoute = SignupImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DashboardRoute = DashboardImport.update({
+  path: '/dashboard',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
@@ -35,6 +42,11 @@ const IndexLazyRoute = IndexLazyImport.update({
 
 const ForgotPasswordIndexRoute = ForgotPasswordIndexImport.update({
   path: '/forgotPassword/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ForgotPasswordResetPassRoute = ForgotPasswordResetPassImport.update({
+  path: '/forgotPassword/resetPass',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -51,12 +63,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard': {
+      preLoaderRoute: typeof DashboardImport
+      parentRoute: typeof rootRoute
+    }
     '/signup': {
       preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
     '/forgotPassword/enterAns': {
       preLoaderRoute: typeof ForgotPasswordEnterAnsImport
+      parentRoute: typeof rootRoute
+    }
+    '/forgotPassword/resetPass': {
+      preLoaderRoute: typeof ForgotPasswordResetPassImport
       parentRoute: typeof rootRoute
     }
     '/forgotPassword/': {
@@ -70,8 +90,10 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
+  DashboardRoute,
   SignupRoute,
   ForgotPasswordEnterAnsRoute,
+  ForgotPasswordResetPassRoute,
   ForgotPasswordIndexRoute,
 ])
 

@@ -31,7 +31,7 @@ const handleSignUp= async(req:Request,res:Response)=>{
         if(req.body)
         {
             user = req.body;
-            // console.log(user);
+            console.log(user);
         }
         if(user)
         {
@@ -102,7 +102,7 @@ const handleForgotPassword= async (req:Request,res:Response)=>{
     if(await User.exists({email:email}))
     {
         const user = await User.findOne({email:email})
-        res.send(200).json({
+        res.status(200).json({
             securityQues:user?.securityQues,
         })
     }else{
@@ -120,9 +120,16 @@ const handleEnterSecurityAns=async(req:Request,res:Response)=>{
         await connectDB();
         const ans = req.body;
         const user = await User.findOne({email:ans.email});
-        if(ans.securityAns === user?.securityAns)
+        let provideAns = ans.securityAns;
+        provideAns = provideAns.toLowerCase();
+        console.log(provideAns);
+        let fetchedAns = user?.securityAns;
+        fetchedAns = fetchedAns?.toLowerCase();
+        if((fetchedAns) === (provideAns))
         {
             res.status(200).json({message:"Correct answer provided,User may reset the password"})
+        }else{
+            res.status(400).json({error:"wrong answer provided,try again"})
         }
     }catch(err)
     {
@@ -133,19 +140,22 @@ const handleEnterSecurityAns=async(req:Request,res:Response)=>{
 const handleResetPassword=async(req:Request,res:Response)=>{
     try{
         await connectDB();
-        const request = req.body
+        const request = req.body;
+        console.log(request);
         const user = await User.findOne({email:request.email})
         if(user)
         {
+            console.log(user);
             user.password = request.password;
             await user.save();
             res.status(200).json({message:"Password successfully updated,try logging in"})
         }
     }catch(err)
     {
+        console.log(err);
         res.status(500).json({error:err})
     }
 }
 export{
-    handleSignUp,handleLogIn,handleForgotPassword,
+    handleSignUp,handleLogIn,handleForgotPassword,handleEnterSecurityAns,handleResetPassword
 }

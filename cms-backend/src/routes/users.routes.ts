@@ -1,4 +1,4 @@
-import { handleLogIn, handleSignUp,handleForgotPassword} from "./users.controllers";
+import { handleLogIn, handleSignUp,handleForgotPassword, handleEnterSecurityAns, handleResetPassword} from "./users.controllers";
 
 const {Router} = require("express");
 
@@ -8,5 +8,7 @@ authRouter.post('/signup',handleSignUp);
 authRouter.post('/login',handleLogIn);
 
 authRouter.post('/forgotPassword',handleForgotPassword);
+authRouter.post('/forgotPassword/enterAns',handleEnterSecurityAns);
+authRouter.post('/forgotPassword/resetPass',handleResetPassword);
 
 export{authRouter}

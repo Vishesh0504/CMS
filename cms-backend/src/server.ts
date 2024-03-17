@@ -10,9 +10,8 @@ const cors = require("cors");
 const app = express();
 
 import { authRouter } from "./routes/users.routes";
-
-app.use(logger("dev"));
 app.use(cors());
+app.use(logger("dev"));
 app.use(helmet());
 app.use(cookie_parser());
 app.use(express.json());
