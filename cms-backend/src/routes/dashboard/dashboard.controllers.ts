@@ -14,7 +14,7 @@ interface Conference {
     endTimeString: string;
     endTimeObj: Date;
     room: number;
-    invitedUsers: { name: string; email: string }[];
+    invitedUsers?: { name: string; email: string }[];
   }
 
   function convertTimesToDateObj(dateString: string, startTimeString: string, endTimeString: string): { startTimeObj: Date; endTimeObj: Date } {
@@ -41,6 +41,7 @@ const createConference =async(req:Request,res:Response)=>{
         await connectDB()
         const conference:Conference = req.body;
         const {startTimeObj,endTimeObj} = convertTimesToDateObj(conference.date,conference.startTimeString,conference.endTimeString);
+        console.log(conference);
         if(conference)
         {
             const createdConf = await Conference.create({
@@ -63,12 +64,12 @@ const fetchConferences=async(req:Request,res:Response)=>{
         await connectDB();
         const query = {
             $or: [
-              { CreatedBy: req.body.email },
+              { CreatedBy: req.body.user.email },
               { invitedUsers: { $elemMatch: { email: req.body.user.email } } },
             ],
           };
         const conferences = await Conference.find(query);
-
+        console.log(conferences);
         const upcomingConferences:any= [];
         const pastConferences:any = [];
 

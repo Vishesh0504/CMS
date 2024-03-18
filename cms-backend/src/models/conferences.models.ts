@@ -40,7 +40,6 @@ const ConferenceSchema = new Schema({
             name:String,
             email:String
         }],
-        required:true
     }
   });
 

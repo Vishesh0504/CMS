@@ -9,7 +9,7 @@ dashRouter.post('/createConference',createConference);
 dashRouter.get('/fetchConferences',fetchConferences);
 dashRouter.get('/fetchAllUsers',fetchAllUsers);
 
-dashRouter.delete('/deleteConference',handleDeleteConference);
+dashRouter.post('/deleteConference',handleDeleteConference);
 
 dashRouter.put('/editConference',handleEditConference);
 
