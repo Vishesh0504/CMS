@@ -22,7 +22,6 @@ const ConferenceSchema = new Schema({
     },
     startTimeObj: {
       type: Date,
-      required: true
     },
     endTimeString: {
       type: String,

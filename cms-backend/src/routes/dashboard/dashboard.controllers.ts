@@ -68,23 +68,19 @@ const fetchConferences=async(req:Request,res:Response)=>{
             ],
           };
         const conferences = await Conference.find(query);
-        if(conferences)
-        {
+
         const upcomingConferences:any= [];
         const pastConferences:any = [];
 
         conferences.forEach(conference => {
         const now = new Date();
-        if (conference.startTimeObj > now) {
-            upcomingConferences.push(conference);
-        } else if ( (conference.endTimeObj <= now)) {
-            pastConferences.push(conference);
+        if (conference.startTimeObj! > now) {
+          upcomingConferences.push(conference);
+        } else if ( (conference.endTimeObj! <= now)) {
+          pastConferences.push(conference);
         }
         });
         res.status(200).json({upcomingConferences:upcomingConferences,pastConferences:pastConferences});
-        }else{
-          res.status(200).json({message:"You don't have any conferences"});
-        }
 
     }catch(err){
         console.log(err);

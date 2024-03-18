@@ -5,7 +5,7 @@ const path = require('path');
 
 const verifyAuth =(req:Request,res:Response,next:NextFunction)=>{
     const access_token = req.cookies.access_token;
-    console.log(access_token);
+    // console.log(access_token);
     if(!access_token)
     {
         return res.status(403).json({error:"User is not authorized to access"});

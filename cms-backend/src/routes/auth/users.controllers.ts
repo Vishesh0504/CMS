@@ -69,19 +69,20 @@ const handleLogIn= async(req:Request,res:Response)=>{
         if(await User.exists({email:user.email}))
         {
             const existingUser= await User.findOne({email:user.email})
+            const name = existingUser?.name
             const existingPass = existingUser?.password;
             const enteredPass = user.password
             if(await bcrypt.compare(enteredPass,existingPass))
             {
                 const foundUser ={
-                    name:user.name,
+                    name:name!,
                     email:user.email
                 }
                 let jwtToken = await generateJWT(foundUser);
+                // console.log(foundUser)
+                res.cookie('user',JSON.stringify(foundUser),{secure:false,sameSite:'lax'});
                 res
-                .cookie('access_token',jwtToken,{secure:true,httpOnly:true,sameSite:true})
-                .cookie('user',foundUser,{secure:true,sameSite:true})
-                .status(200)
+                .cookie('access_token',jwtToken,{secure:false,httpOnly:true,sameSite:'lax'})
                 .json({message:"user successfully logged in"})
             }else{
                 res.status(403).json({error:"Incorrect password provided by user"})
@@ -90,6 +91,7 @@ const handleLogIn= async(req:Request,res:Response)=>{
             res.status(400).json({error:"User doesn't exist please Sign up first"})
         }
     }catch(err){
+        console.error(err);
         res.status(500).json({error:err})
     }
 }

@@ -12,7 +12,7 @@ const app = express();
 import { authRouter } from "./routes/auth/users.routes";
 import dashRouter from "./routes/dashboard/dashboard.routes";
 import verifyAuth from "./routes/protected";
-app.use(cors());
+app.use(cors({origin:`http://localhost:5173`,credentials:true}));
 app.use(logger("dev"));
 app.use(helmet());
 app.use(cookie_parser());
