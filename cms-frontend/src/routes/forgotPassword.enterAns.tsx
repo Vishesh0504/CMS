@@ -1,4 +1,4 @@
-import { createFileRoute,useNavigate} from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/forgotPassword/enterAns")({
   component: () => <EnterAns />,
@@ -39,18 +39,19 @@ function EnterAns() {
       email: email,
     };
     try {
-      const res = await axios.post(`${URL_ORIGIN}/auth/forgotPassword/enterAns`, data);
+      const res = await axios.post(
+        `${URL_ORIGIN}/auth/forgotPassword/enterAns`,
+        data,
+      );
       if (res.status === 200) {
         toast.success(`${res.data.message}`);
-        setTimeout(()=>navigate({to:"/forgotPassword/resetPass"}),1000)
+        setTimeout(() => navigate({ to: "/forgotPassword/resetPass" }), 1000);
       } else {
         toast.error(`${res.data.error}`);
       }
     } catch (err) {
-      if(err instanceof AxiosError)
-      {
+      if (err instanceof AxiosError) {
         toast.error(`${err.response?.data.error}`);
-
       }
       console.log(err);
     }

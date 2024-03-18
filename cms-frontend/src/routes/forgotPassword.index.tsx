@@ -41,10 +41,8 @@ const ForgotPassword = () => {
       navigate({ to: "/forgotPassword/enterAns" });
     } catch (err) {
       console.log(err);
-      if(err instanceof AxiosError)
-      {
+      if (err instanceof AxiosError) {
         toast.error(`${err.response?.data.error}`);
-
       }
     }
   }

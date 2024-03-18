@@ -1,10 +1,12 @@
+// import Navbar from "@/components/Navbar";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { Toaster } from "react-hot-toast";
-
+import { AuthProvider } from "@/context/AuthContext";
 const RootComponent = () => {
   return (
     <div>
+      {/* <Navbar/> */}
       <Toaster />
       <Outlet />
       <TanStackRouterDevtools />
@@ -12,5 +14,9 @@ const RootComponent = () => {
   );
 };
 export const Route = createRootRouteWithContext()({
-  component: () => <RootComponent />,
+  component: () => (
+    <AuthProvider>
+      <RootComponent />,
+    </AuthProvider>
+  ),
 });

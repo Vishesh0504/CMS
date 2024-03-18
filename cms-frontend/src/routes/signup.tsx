@@ -33,7 +33,7 @@ function SignUp() {
     });
 
   const formSchema = z.object({
-    name:z.string(),
+    name: z.string(),
     email: z.string().email(),
     password: passwordSchema,
     securityQues: z.string(),
@@ -43,7 +43,7 @@ function SignUp() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name:"",
+      name: "",
       email: "",
       password: "",
       securityQues: "",
@@ -61,10 +61,8 @@ function SignUp() {
         toast.error(`${res.data.error}`);
       }
     } catch (err) {
-      if(err instanceof AxiosError)
-      {
+      if (err instanceof AxiosError) {
         toast.error(`${err.response?.data.error}`);
-
       }
       console.log(err);
     }
@@ -85,7 +83,7 @@ function SignUp() {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your name" {...field} required/>
+                    <Input placeholder="Enter your name" {...field} required />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
