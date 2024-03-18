@@ -1,13 +1,13 @@
-import { connectDB } from "../utils/db"
-import { Request,Response, json } from "express";
-import User from "../models/users.models";
+import { connectDB } from "../../utils/db"
+import { Request,Response } from "express";
+import User from "../../models/users.models";
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 const path = require("path");
 const jwt = require("jsonwebtoken");
 
 const privateKey = fs.readFileSync(
-    path.join(__dirname, "../../certificates/server.key"),
+    path.join(__dirname, "../../../certificates/server.key"),
   );
 
 interface User{
@@ -31,12 +31,11 @@ const handleSignUp= async(req:Request,res:Response)=>{
         if(req.body)
         {
             user = req.body;
-            console.log(user);
+            // console.log(user);
         }
         if(user)
         {
             await connectDB();
-            console.log("hello");
             if(await User.exists({ email: user.email }))
             {
                 return res.status(409).json({error:"User already exists,Please Login instead"});
@@ -51,7 +50,7 @@ const handleSignUp= async(req:Request,res:Response)=>{
                     createdAt:new Date(),
                 })
                 res.status(200).json({message:"User successfully created,Login to continue"})
-                console.log(newUser);
+                // console.log(newUser);
             }
         }
         else{

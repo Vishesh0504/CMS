@@ -9,7 +9,9 @@ const logger = require("morgan");
 const cors = require("cors");
 const app = express();
 
-import { authRouter } from "./routes/users.routes";
+import { authRouter } from "./routes/auth/users.routes";
+import dashRouter from "./routes/dashboard/dashboard.routes";
+import verifyAuth from "./routes/protected";
 app.use(cors());
 app.use(logger("dev"));
 app.use(helmet());
@@ -18,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/auth',authRouter);
+app.use('/dashboard',verifyAuth,dashRouter);
 
 https
   .createServer(
