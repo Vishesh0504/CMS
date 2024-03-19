@@ -80,10 +80,10 @@ const handleLogIn= async(req:Request,res:Response)=>{
                 }
                 let jwtToken = await generateJWT(foundUser);
                 // console.log(foundUser)
-                res.cookie('user',JSON.stringify(foundUser),{secure:false,sameSite:'lax'});
-                res
-                .cookie('access_token',jwtToken,{secure:false,httpOnly:true,sameSite:'lax'})
-                .json({message:"user successfully logged in"})
+                // res.cookie('user',JSON.stringify(foundUser),{secure:false,sameSite:'lax'});
+                // res
+                // .cookie('access_token',jwtToken,{secure:false,httpOnly:true,sameSite:'lax'})
+                res.json({message:"user successfully logged in",jwt:jwtToken});
             }else{
                 res.status(403).json({error:"Incorrect password provided by user"})
             }

@@ -1,7 +1,7 @@
 import { URL_ORIGIN } from "@/constants";
 import { AuthContext } from "@/context/AuthContext";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import axios, { Axios, AxiosError } from "axios";
+import axios, {  AxiosError } from "axios";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useCookies } from "react-cookie";
@@ -116,9 +116,13 @@ const Dashboard = () => {
   useEffect(() => {
     async function fetchConferences() {
       try {
+        const access_token = sessionStorage.getItem('access_token');
+        // console.log(access_token)
         const res = await axios.get(
           `${URL_ORIGIN}/dashboard/fetchConferences`,
-          { withCredentials: true },
+          { withCredentials: true,headers:{
+            Authorization:`${access_token}`
+          }},
         );
         console.log(res);
         setUpcoming(res.data.upcomingConferences);

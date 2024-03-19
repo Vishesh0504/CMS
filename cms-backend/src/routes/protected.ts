@@ -4,7 +4,8 @@ const fs = require('fs');
 const path = require('path');
 
 const verifyAuth =(req:Request,res:Response,next:NextFunction)=>{
-    const access_token = req.cookies.access_token;
+    const access_token = req.headers.authorization;
+    console.log(access_token);
     // console.log(access_token);
     if(!access_token)
     {

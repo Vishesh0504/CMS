@@ -50,6 +50,7 @@ function Index() {
       const res = await axios.post(`${URL_ORIGIN}/auth/login`, values, {
         withCredentials: true,
       });
+       sessionStorage.setItem('access_token',(res.data.jwt));
       if (res.status === 200) {
         toast.success(`${res.data.message}`);
         navigate({ to: "/dashboard" });
